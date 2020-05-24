@@ -50,7 +50,7 @@ namespace PokemonToShakespeareAPI.Controllers
             Task<Pokemon> task = _pokemonService.getPokemonFlavorTextTranslationAsync(Name.ToLower(), textLanguage);
 
             task.Wait();
-            string name = task.Result;
+            string name = task.Result.description;
             return name;
         }
 

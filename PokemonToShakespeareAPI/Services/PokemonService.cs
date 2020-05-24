@@ -20,7 +20,7 @@ namespace PokemonToShakespeareAPI.Services
 
             Pokemon pokemonToTranslate = new Pokemon(pokemonName);
             //GET pokemon description from its name
-            pokemonToTranslate.description = await _pokemonRepository.GetPokemonDescriptionAsync(pokemonToTranslate, textLanguage);
+            pokemonToTranslate = await _pokemonRepository.GetPokemonDescriptionAsync(pokemonToTranslate, textLanguage);
             //translate the description into shakespearian english
             pokemonToTranslate.description = await _translationRepository.GetToShakespeareTranslationAsync(pokemonToTranslate.description);
 
