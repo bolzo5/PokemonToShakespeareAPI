@@ -13,10 +13,13 @@ Set up Docker to run .NET core applications
 
 Navigate to the project folder, the one with the .sln and dockerimage files.  
 Run the following Docker CLI command to build the application image.  
-
+```  
 	docker build -t pokemontoshakespeareapi .
+```  
 Then start an instance of the image, running on port 32768:80
+```  
 	docker run --name pokemontoshakespeareapi --rm -it -p 32768:80 pokemontoshakespeareapi
+```  
 	
 Finally you can try the endpoints at:
 ``` 
