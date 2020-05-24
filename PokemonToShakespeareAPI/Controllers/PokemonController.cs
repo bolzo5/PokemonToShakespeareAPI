@@ -42,7 +42,7 @@ namespace PokemonToShakespeareAPI.Controllers
 
         // GET: api/Pokemon/name
         [HttpGet("{Name}", Name = "Get")]
-        public string Get(string Name)
+        public Pokemon Get(string Name)
         {
             string textLanguage = _config.GetValue<string>(
                 "PokemonAPIOptions:Language");
@@ -50,8 +50,9 @@ namespace PokemonToShakespeareAPI.Controllers
             Task<Pokemon> task = _pokemonService.getPokemonFlavorTextTranslationAsync(Name.ToLower(), textLanguage);
 
             task.Wait();
-            string name = task.Result.description;
-            return name;
+
+            Pokemon result = task.Result;
+            return result;
         }
 
 
