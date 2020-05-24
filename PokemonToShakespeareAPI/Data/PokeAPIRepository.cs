@@ -9,33 +9,36 @@ namespace PokemonToShakespeareAPI.Data
 {
     public class PokeAPIRepository : IPokemonRepository
     {
-        //public async Task<string> getPokemonDescriptionAsync(string Name, string textLanguage)
+        public HttpClient _httpClient;
+        public PokeAPIRepository(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
         public async Task<Pokemon> GetPokemonDescriptionAsync(Pokemon pokemon, string textLanguage)
         {
-            using (var client = new HttpClient())
+
+            _httpClient.BaseAddress = new Uri("https://pokeapi.co/api/v2/");
+            //HTTP GET
+            var responseTask = _httpClient.GetAsync("pokemon-species/" + pokemon.name);
+            responseTask.Wait();
+
+            var result = responseTask.Result;
+            if (result.IsSuccessStatusCode)
             {
-                client.BaseAddress = new Uri("https://pokeapi.co/api/v2/");
-                //HTTP GET
-                var responseTask = client.GetAsync("pokemon-species/" + pokemon.name);
-                responseTask.Wait();
+                var readTask = await result.Content.ReadAsStringAsync();
+                PokemonSpecies species = JsonSerializer.Deserialize<PokemonSpecies>(readTask);
 
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
+                foreach (FlavorTextEntry entry in species.flavor_text_entries)
                 {
-                    var readTask = await result.Content.ReadAsStringAsync();
-                    PokemonSpecies species = JsonSerializer.Deserialize<PokemonSpecies>(readTask);
-
-                    foreach (FlavorTextEntry entry in species.flavor_text_entries)
+                    if (entry.language.name.ToLower() == textLanguage)
                     {
-                        if (entry.language.name.ToLower() == textLanguage)
-                        {
-                            //retrieve latest game version containing the pokemon id of the flavour text
-                            pokemon.description = entry.flavor_text;
-                            break;
-                        }
+                        //retrieve latest game version containing the pokemon id of the flavour text
+                        pokemon.description = entry.flavor_text;
+                        break;
                     }
                 }
             }
+
             return pokemon;
         }
     }

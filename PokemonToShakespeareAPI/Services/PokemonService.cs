@@ -1,7 +1,4 @@
 ﻿using PokemonToShakespeareAPI.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PokemonToShakespeareAPI.Services
@@ -17,13 +14,18 @@ namespace PokemonToShakespeareAPI.Services
         }
         public async Task<Pokemon> getPokemonFlavorTextTranslationAsync(string pokemonName, string textLanguage)
         {
-
             Pokemon pokemonToTranslate = new Pokemon(pokemonName);
-            //GET pokemon description from its name
-            pokemonToTranslate = await _pokemonRepository.GetPokemonDescriptionAsync(pokemonToTranslate, textLanguage);
-            //translate the description into shakespearian english
-            pokemonToTranslate.description = await _translationRepository.GetToShakespeareTranslationAsync(pokemonToTranslate.description);
+            if (pokemonName != "")
+            {
+                //GET pokemon description from its name
+                pokemonToTranslate = await _pokemonRepository.GetPokemonDescriptionAsync( pokemonToTranslate, textLanguage);
+                //translate the description into shakespearian english
+                if (pokemonToTranslate.description != "")
+                {
+                    pokemonToTranslate.description = await _translationRepository.GetToShakespeareTranslationAsync(pokemonToTranslate.description);
+                }
 
+            }
             return pokemonToTranslate;
         }
     }

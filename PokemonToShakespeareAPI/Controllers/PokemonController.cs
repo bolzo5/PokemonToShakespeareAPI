@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using System.Text;
 using Microsoft.Extensions.Configuration;
-//using PokemonToShakespeareAPI.Services;
-using System.Text.RegularExpressions;
-using PokemonToShakespeareAPI.Data;
 using PokemonToShakespeareAPI.Services;
 
 namespace PokemonToShakespeareAPI.Controllers
@@ -22,12 +12,8 @@ namespace PokemonToShakespeareAPI.Controllers
     {
         private readonly IConfiguration _config;
         private IPokemonService _pokemonService;
-        //public PokemonController(IConfiguration config)
-        //{
-        //    _config = config;
-        //}
-    
-        public PokemonController(IConfiguration config,IPokemonService pokemonService)
+
+        public PokemonController(IConfiguration config, IPokemonService pokemonService)
         {
             _config = config;
             _pokemonService = pokemonService;
@@ -42,20 +28,30 @@ namespace PokemonToShakespeareAPI.Controllers
 
         // GET: api/Pokemon/name
         [HttpGet("{Name}", Name = "Get")]
-        public Pokemon Get(string Name)
+        public IActionResult Get(string Name)
         {
-            string textLanguage = _config.GetValue<string>(
-                "PokemonAPIOptions:Language");
+            try
+            {
+                string textLanguage = _config.GetValue<string>(
+                    "PokemonAPIOptions:Language");
 
-            Task<Pokemon> task = _pokemonService.getPokemonFlavorTextTranslationAsync(Name.ToLower(), textLanguage);
+                Task<Pokemon> task = _pokemonService.getPokemonFlavorTextTranslationAsync(Name.ToLower(), textLanguage);
 
-            task.Wait();
+                task.Wait();
 
-            Pokemon result = task.Result;
-            return result;
+                Pokemon result = task.Result;
+
+                if (result.name == "" || result.description == "")
+                {
+                    return NotFound(Name + " not found ");
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
         }
-
-
-        
     }
 }

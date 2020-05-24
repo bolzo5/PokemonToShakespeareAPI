@@ -29,8 +29,9 @@ namespace PokemonToShakespeareAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSingleton<IPokemonRepository, PokeAPIRepository>();
-            services.AddSingleton<ITranslationRepository, FunTranslationAPIRepository>();
+
+            services.AddHttpClient<IPokemonRepository, PokeAPIRepository>();
+            services.AddHttpClient<ITranslationRepository, FunTranslationAPIRepository>();
             services.AddSingleton<IPokemonService, PokemonService>();
         }
 
