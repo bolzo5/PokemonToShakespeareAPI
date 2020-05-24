@@ -38,6 +38,10 @@ namespace PokemonToShakespeareAPI.Data
                     translationOutput = translation.contents.translated;
                 }
             }
+            else if(result.StatusCode==System.Net.HttpStatusCode.TooManyRequests)
+            {
+                translationOutput = System.Net.HttpStatusCode.TooManyRequests.GetHashCode().ToString();
+            }
             return translationOutput;
         }
     }

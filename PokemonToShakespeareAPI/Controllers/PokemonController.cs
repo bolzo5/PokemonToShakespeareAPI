@@ -44,6 +44,9 @@ namespace PokemonToShakespeareAPI.Controllers
                 if (result.name == "" || result.description == "")
                 {
                     return NotFound(Name + " not found ");
+                } else if (result.description == "429")
+                {
+                    return StatusCode((int)System.Net.HttpStatusCode.TooManyRequests);
                 }
                 return Ok(result);
             }
