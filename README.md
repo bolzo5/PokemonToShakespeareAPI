@@ -41,16 +41,18 @@ Please remember that the free tier of FunTranslation API used has a limit of 60 
 
 ## Running the tests
 Included in the solution there are two test project, one for integration testing and one for unit testing.  
-Integration tests:  
+### Integration tests:
+ Testing the generic GET, and both success/fail of the PokemonController  
   * ShouldReturnPokemonAPIMessage  
  * ShouldReturnPokemonDescriptionTranslated  
- * ShouldReturnPokemonDescriptionNotFound    
-Testing the generic GET, and both success/fail of the PokemonController  
-Unit Tests:  
+ * ShouldReturnPokemonDescriptionNotFound
+
+### Unit Tests: 
+  Testing a correct response from the PokemonService and two failure modes  
  * ShouldReturnPokemonDescriptionTranslated  
  * ShouldReturnEmptyDescription  
  * ShouldReturnTooManyStatusCode  
-Testing a correct response from the PokemonService and two failure modes  
+
 
 
 ## Contributing  
