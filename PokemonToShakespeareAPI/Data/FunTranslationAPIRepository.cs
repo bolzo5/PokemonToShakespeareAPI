@@ -17,7 +17,10 @@ namespace PokemonToShakespeareAPI.Data
         public async Task<string> GetToShakespeareTranslationAsync(string text)
         {
             string translationOutput = "";
-            _httpClient.BaseAddress = new Uri("https://api.funtranslations.com/translate/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://api.funtranslations.com/translate/");
+            }
 
             //HTTP Post
             var content = new FormUrlEncodedContent(new[]

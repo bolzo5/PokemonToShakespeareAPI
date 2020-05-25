@@ -16,12 +16,14 @@ namespace PokemonToShakespeareAPI.Data
         }
         public async Task<Pokemon> GetPokemonDescriptionAsync(Pokemon pokemon, string textLanguage)
         {
-
-            _httpClient.BaseAddress = new Uri("https://pokeapi.co/api/v2/");
+            if (_httpClient.BaseAddress == null)
+            {
+                _httpClient.BaseAddress = new Uri("https://pokeapi.co/api/v2/");
+            }
+            //_httpClient.BaseAddress = new Uri("https://pokeapi.co/api/v2/");
             //HTTP GET
             var responseTask = _httpClient.GetAsync("pokemon-species/" + pokemon.name);
             responseTask.Wait();
-
             var result = responseTask.Result;
             if (result.IsSuccessStatusCode)
             {
